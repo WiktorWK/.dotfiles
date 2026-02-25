@@ -49,9 +49,6 @@ sudo usermod -aG wireshark $USER
 # install tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
 
-# git aliases
-sh ./git_aliases.sh
-
 # install dev tool managers
 ./nvm_install.sh
 
