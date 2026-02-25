@@ -32,7 +32,7 @@ sudo apt-get -y install apt-transport-https i3-wm i3status i3lock \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
     maim xclip xsel feh compton jq wireshark nmap gnome-clocks solaar \
     fuse libfuse2 gimp valgrind gdbserver btop brightnessctl obs-studio \
-    nextcloud-desktop moreutils libpq-dev python3-venv
+    moreutils libpq-dev python3-venv
 
 # alacritty dependencies
 sudo apt-get -y install cmake libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev
@@ -45,9 +45,6 @@ sudo usermod -aG wireshark $USER
 
 # install nvim
 ./nvim_install.sh
-
-# install obsidian
-./obsidian_install.sh
 
 # install tailscale
 curl -fsSL https://tailscale.com/install.sh | sh
@@ -87,21 +84,8 @@ python3 get-platformio.py
 rm get-platformio.py
 sudo usermod -aG dialout $USER
 
-# clone scripts
-git clone git@github.com:kowaltek/scripts.git ~/Scripts
-
-# install scripts
-mkdir -p ~/.local/bin
-~/Scripts/install.sh
-
-# register git aliases
-./git_aliases.sh
-
 # create a directory for projects
 mkdir ~/projects
-
-# create a directory for nextcloud
-mkdir ~/Nextcloud
 
 # install docker
 sh ./docker_install.sh
