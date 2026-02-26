@@ -85,11 +85,15 @@ cd ~/.dotfiles
 stow nvim tmux zsh
 
 # install govm
-printf "\n\n install govm \n\n"
+printf "\n\n exec zsh \n\n"
 exec zsh
+printf "\n\n source ~/.zshrc \n\n"
 source ~/.zshrc
+printf "\n\n install govm \n\n"
 go install github.com/melkeydev/govm@latest
 
+# daemon reload
+printf "\n\n daemon-reload \n\n"
 systemctl --user daemon-reload
 
 # install typescript globally (needed by pop shell install)
