@@ -57,7 +57,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
 # create a directory for projects
-mkdir ~/projects || true
+rm -rf ~/.tmux || true
+mkdir ~/projects
 
 # install docker
 sh ./docker_install.sh
