@@ -83,6 +83,7 @@ cd ~/.dotfiles
 stow nvim tmux zsh
 
 # install govm
+exec zsh
 source ~/.zshrc
 go install github.com/melkeydev/govm@latest
 
