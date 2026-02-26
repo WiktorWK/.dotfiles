@@ -23,7 +23,7 @@ sudo apt-get -y install apt-transport-https \
     git make libssl-dev curl wget zsh rofi build-essential \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
     maim xclip xsel feh compton jq wireshark nmap solaar \
-    fuse libfuse2 gimp valgrind gdbserver btop brightnessctl \
+    fuse libfuse2 gimp valgrind gdbserver btop \
     moreutils libpq-dev python3-venv
 
 # install tmux tpm
@@ -48,6 +48,11 @@ source ~/.nvm/nvm.sh
 # install latest lts node version
 nvm install --lts node
 nvm use --lts
+
+# install sdkman
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk version
 
 # install go
 ./go_install.sh
@@ -87,12 +92,9 @@ stow nvim tmux zsh
 # install govm
 printf "\n\n source ~/.zshrc \n\n"
 source ~/.zshrc
+
 printf "\n\n install govm \n\n"
 go install github.com/melkeydev/govm@latest
-
-# daemon reload
-printf "\n\n daemon-reload \n\n"
-systemctl --user daemon-reload
 
 # install typescript globally (needed by pop shell install)
 printf "\n\n install TS \n\n"
