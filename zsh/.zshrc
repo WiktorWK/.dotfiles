@@ -140,9 +140,6 @@ export PATH=$PATH:$JAVA_HOME/bin
 # esp-idf configuration
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
 
-# platformio configuration
-export PATH=$PATH:$HOME/.platformio/penv/bin
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -171,11 +168,6 @@ alias lg='lazygit'
 # Starship prompt initialization
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
 eval "$(starship init zsh)"
-
-# update these after system setup
-# NEVER COMMIT VALID AUTH TOKENS!!!!!!!!!!!!!!!!!!!
-export BW_CLIENTID=""
-export BW_CLIENTSECRET=""
 
 export GEMINI_API_KEY="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"
 
