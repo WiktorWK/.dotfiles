@@ -80,7 +80,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 # stow configs
 rm ~/.zshrc || true
 cd ~/.dotfiles
-stow nvim tmux zsh psql
+stow nvim tmux zsh
 
 # install govm
 source ~/.zshrc
