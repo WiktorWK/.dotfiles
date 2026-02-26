@@ -43,7 +43,7 @@ curl -fsSL https://tailscale.com/install.sh | sh
 ./nvm_install.sh
 
 #source nvm
-source ~/.bashrc
+source ~/.nvm/nvm.sh
 
 # install latest lts node version
 nvm install --lts node
