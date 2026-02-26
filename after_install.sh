@@ -75,14 +75,17 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 npm install -g @bitwarden/cli
 
 # install powerlevel10k theme
+printf "\n\n install powerlevel10k \n\n"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
 # stow configs
+printf "\n\n stow .dotfiles \n\n"
 rm ~/.zshrc || true
 cd ~/.dotfiles
 stow nvim tmux zsh
 
 # install govm
+printf "\n\n install govm \n\n"
 exec zsh
 source ~/.zshrc
 go install github.com/melkeydev/govm@latest
@@ -90,11 +93,15 @@ go install github.com/melkeydev/govm@latest
 systemctl --user daemon-reload
 
 # install typescript globally (needed by pop shell install)
+printf "\n\n install TS \n\n"
 npm install -g typescript
 
 # install yarn - needed for some neovim plugins
+printf "\n\n install yarn -g \n\n"
 npm install --global yarn
 
+# install awsome fonts
+printf "\n\n install fonts \n\n"
 sh ./font_install.sh
 
 printf "\n\n	You need to login again\n\n"
