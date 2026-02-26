@@ -74,9 +74,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # install bitwarden CLI
 npm install -g @bitwarden/cli
 
-# install govm
-go install github.com/melkeydev/govm@latest
-
 # install powerlevel10k theme
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 
@@ -84,6 +81,10 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 rm ~/.zshrc || true
 cd ~/.dotfiles
 stow nvim tmux zsh psql
+
+# install govm
+source ~/.zshrc
+go install github.com/melkeydev/govm@latest
 
 systemctl --user daemon-reload
 
