@@ -42,6 +42,9 @@ curl -fsSL https://tailscale.com/install.sh | sh
 # install dev tool managers
 ./nvm_install.sh
 
+#source nvm
+source ~/.bashrc
+
 # install latest lts node version
 nvm install --lts node
 nvm use --lts
