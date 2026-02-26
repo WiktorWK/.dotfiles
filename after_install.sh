@@ -67,7 +67,7 @@ sh ./docker_install.sh
 curl -sS https://starship.rs/install.sh | sh
 
 # install ohmyzsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # install bitwarden CLI
 npm install -g @bitwarden/cli
