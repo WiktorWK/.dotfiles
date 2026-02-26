@@ -86,7 +86,11 @@ stow nvim tmux zsh
 
 # install govm
 printf "\n\n exec zsh \n\n"
-exec zsh
+if ! eval "zsh" > log.txt; then
+  echo>&2 "script failed"
+  exit 99
+fi
+
 printf "\n\n source ~/.zshrc \n\n"
 source ~/.zshrc
 printf "\n\n install govm \n\n"
