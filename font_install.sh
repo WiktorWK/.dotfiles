@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # installs hack nerd font and patches it
 
 sudo apt-get -y install fontforge
