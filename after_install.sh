@@ -19,8 +19,7 @@ sudo ./pg_admin.sh
 # fuse and libfuse2 are needed to support AppImages
 # needed to install python3.12-venv as a depency for platformIO install - package missing on ubuntu24.04
 sudo apt-get update
-sudo apt-get -y install apt-transport-https \
-    git make libssl-dev curl wget zsh rofi build-essential \
+sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-essential \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
     maim xclip xsel feh compton jq wireshark nmap solaar \
     fuse libfuse2 gimp valgrind gdbserver btop \
@@ -88,13 +87,6 @@ printf "\n\n stow .dotfiles \n\n"
 rm ~/.zshrc || true
 cd ~/.dotfiles
 stow nvim tmux zsh
-
-# install govm
-printf "\n\n source ~/.zshrc \n\n"
-source ~/.zshrc
-
-printf "\n\n install govm \n\n"
-go install github.com/melkeydev/govm@latest
 
 # install typescript globally (needed by pop shell install)
 printf "\n\n install TS \n\n"
