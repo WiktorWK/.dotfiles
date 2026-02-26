@@ -3,7 +3,7 @@
 set -e
 
 # create a folder for applications installed as appimages
-mkdir -p ~/Applications
+mkdir -p $HOME/Applications
 
 # make sure curl is installed
 sudo apt-get -y install curl
@@ -26,8 +26,8 @@ sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-
     moreutils libpq-dev python3-venv
 
 # install tmux tpm
-rm -rf ~/.tmux || true
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+rm -rf $HOME/.tmux || true
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 # add user to wireshark group, so that it doesn't need to be run as root
 sudo usermod -aG wireshark $USER
@@ -42,7 +42,7 @@ curl -fsSL https://tailscale.com/install.sh | sh
 ./nvm_install.sh
 
 #source nvm
-source ~/.nvm/nvm.sh
+source $HOME/.nvm/nvm.sh
 
 # install latest lts node version
 nvm install --lts node
@@ -50,7 +50,7 @@ nvm use --lts
 
 # install sdkman
 curl -s "https://get.sdkman.io" | bash
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+source $HOME/.sdkman/bin/sdkman-init.sh
 sdk version
 
 # install go
@@ -61,8 +61,8 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 . "$HOME/.cargo/env"
 
 # create a directory for projects
-rm -rf ~/projects || true
-mkdir ~/projects
+rm -rf $HOME/projects || true
+mkdir $HOME/projects
 
 # install docker
 sh ./docker_install.sh
@@ -72,7 +72,7 @@ sh ./docker_install.sh
 curl -sS https://starship.rs/install.sh | sh
 
 # install ohmyzsh
-rm -rf /home/wiktor/.oh-my-zsh || true
+rm -rf $HOME/.oh-my-zsh || true
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # install bitwarden CLI
@@ -84,8 +84,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 
 # stow configs
 printf "\n\n stow .dotfiles \n\n"
-rm ~/.zshrc || true
-cd ~/.dotfiles
+rm $HOME/.zshrc || true
+cd $HOME/.dotfiles
 stow nvim tmux zsh
 
 # install typescript globally (needed by pop shell install)
