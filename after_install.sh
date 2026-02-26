@@ -9,10 +9,10 @@ mkdir -p ~/Applications
 sudo apt-get -y install curl
 
 # brave
-./brave.sh
+sudo ./brave.sh
 
 # pgAdmin
-./pg_admin.sh
+sudo ./pg_admin.sh
 
 # update and install necessary packages
 # ripgrep is needed for nvim telescope to work properly and used as nvim's grepprg
