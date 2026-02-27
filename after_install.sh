@@ -86,7 +86,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 printf "\n\n stow .dotfiles \n\n"
 rm $HOME/.zshrc || true
 cd $HOME/.dotfiles
-stow nvim tmux zsh
+stow nvim tmux zsh starship
 
 # install typescript globally (needed by pop shell install)
 printf "\n\n install TS \n\n"
