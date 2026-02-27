@@ -113,11 +113,11 @@ zsh
 
 # install govm
 printf "\n\n install govm \n\n"
-./govm.sh
+go install github.com/melkeydev/govm@latest
 
 # install typescript globally (needed by pop shell install)
 printf "\n\n install TS \n\n"
-npm install -g typescript
+npm install --global typescript
 
 # install yarn - needed for some neovim plugins
 printf "\n\n install yarn -g \n\n"
