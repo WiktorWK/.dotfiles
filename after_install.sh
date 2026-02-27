@@ -15,9 +15,6 @@ sudo ./brave.sh
 sudo ./pg_admin.sh
 
 # update and install necessary packages
-# ripgrep is needed for nvim telescope to work properly and used as nvim's grepprg
-# fuse and libfuse2 are needed to support AppImages
-# needed to install python3.12-venv as a depency for platformIO install - package missing on ubuntu24.04
 sudo apt-get update
 sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-essential \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
