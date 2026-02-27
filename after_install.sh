@@ -21,9 +21,10 @@ sudo ./pg_admin.sh
 sudo apt-get update
 sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-essential \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
-    maim xclip xsel feh compton jq wireshark nmap solaar \
+    maim xclip xsel feh jq wireshark nmap solaar \
     fuse libfuse2 gimp valgrind gdbserver btop \
-    moreutils libpq-dev python3-venv
+    moreutils libpq-dev python3-venv \
+    clamav maven
 
 # install tmux tpm
 rm -rf $HOME/.tmux || true
