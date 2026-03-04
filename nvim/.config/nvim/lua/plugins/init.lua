@@ -4,6 +4,11 @@ return {
     event = "BufWritePre", -- uncomment for format on save
     opts = require "configs.conform",
   },
+  -- {
+  --   "@vue/typescript-plugin",
+  --   languages = { "vue" },
+  --   configNamespace = "typescript",
+  -- },
   {
     "neovim/nvim-lspconfig",
     config = function()
