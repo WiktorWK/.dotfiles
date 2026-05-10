@@ -19,8 +19,9 @@ local servers = {
   css_variables = {},
   cssls = {},
   eslint = {},
-  ts_ls = {},
-  tailwindcss = {},
+  tailwindcss = {
+    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+  },
   pyright = {
     settings = {
       python = {
@@ -36,7 +37,6 @@ local servers = {
   prettier = {},
   postgres_lsp = {},
   jdtls = {},
-  vue_ls = {},
   vtsls = {
     settings = {
       vtsls = {
@@ -48,6 +48,33 @@ local servers = {
       },
     },
     filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+  },
+  vue_ls = {
+    filetypes = { "vue" },
+
+    init_options = {
+      typescript = {
+        tsdk = vim.fn.stdpath "data" .. "/mason/packages/vtsls/node_modules/typescript/lib",
+      },
+    },
+
+    settings = {
+      vue = {
+        complete = {
+          casing = {
+            tags = "both",
+            props = "kebab",
+          },
+        },
+      },
+
+      -- 🔥 HTML custom data (Quasar tags)
+      html = {
+        customData = {
+          vim.fn.getcwd() .. "/.vscode/quasar-html.json",
+        },
+      },
+    },
   },
 }
 

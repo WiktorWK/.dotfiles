@@ -16,3 +16,20 @@ map("n", "n", "nzzzv")
 map("n", "N", "Nzzzv")
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
+
+local function smart_gd()
+  local ok, i18n = pcall(require, "i18n")
+
+  if ok then
+    local success = pcall(i18n.goto_translation)
+    if success then
+      return
+    end
+  end
+
+  vim.lsp.buf.definition()
+end
+
+map("n", "gd", smart_gd, {
+  desc = "LSP definition or i18n translation",
+})

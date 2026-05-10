@@ -140,6 +140,13 @@ export PATH=$PATH:$JAVA_HOME/bin
 # esp-idf configuration
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
 
+# convert to gif
+webm2gif() {
+    ffmpeg -y -i "$1" -vf palettegen palette.png
+    ffmpeg -y -i "$1" -i palette.png -filter_complex paletteuse -r 10 "${1%.webm}.gif"
+    rm palette.png
+}
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -161,6 +168,8 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+alias freecad='~/Applications/freecad'
 
 alias ll='ls -alF'
 alias lg='lazygit'
