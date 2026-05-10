@@ -13,6 +13,7 @@ local vue_plugin = {
 }
 
 local servers = {
+  bashls = {},
   golangci_lint_ls = {},
   gopls = {},
   html = {},
