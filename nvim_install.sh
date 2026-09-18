@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 set -e
@@ -52,4 +51,3 @@ printf " Neovim installed\n"
 printf "========================================\n\n"
 
 printf "Binary: %s\n" "$NVIM_PATH"
-```
