@@ -2,7 +2,8 @@
 
 set -e
 
-GO_VERSION="1.26.0"
+GO_VERSION="$(curl -fsSL 'https://go.dev/VERSION?m=text' | head -n 1)"
+GO_VERSION="${GO_VERSION#go}"
 GO_ARCH="amd64"
 GO_TARBALL="go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
 GO_URL="https://go.dev/dl/${GO_TARBALL}"
