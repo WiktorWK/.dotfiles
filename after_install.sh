@@ -1,125 +1,328 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-# create a folder for applications installed as appimages
-printf "\n\n make Applications folder \n\n"
-mkdir -p $HOME/Applications
+# Always run from the directory containing this script.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-# make sure curl is installed
-printf "\n\n install curl package \n\n"
-sudo apt-get -y install curl
+printf '\n\n========================================\n'
+printf ' System bootstrap\n'
+printf '========================================\n\n'
 
-# brave
-printf "\n\n install brave browser \n\n"
-sudo ./brave.sh
+# ------------------------------------------------------------
+# Applications directory
+# ------------------------------------------------------------
 
-# pgAdmin
-printf "\n\n install pg admin \n\n"
-sudo ./pg_admin.sh
+printf '\n\n=== Applications directory ===\n\n'
 
-# update and install necessary packages
-printf "\n\n install necessary packages \n\n"
-sudo apt-get update
-sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-essential \
-    stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
-    maim xclip xsel feh jq wireshark nmap solaar \
-    fuse libfuse2 gimp valgrind gdbserver btop \
-    moreutils libpq-dev python3-venv \
-    clamav maven
+mkdir -p "$HOME/Applications"
 
-# install tmux tpm
-printf "\n\n install tmux tpm \n\n"
-rm -rf $HOME/.tmux || true
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+# ------------------------------------------------------------
+# System packages
+# ------------------------------------------------------------
 
-# add user to wireshark group, so that it doesn't need to be run as root
-printf "\n\n add use to wireshark group \n\n"
-sudo usermod -aG wireshark $USER
+printf '\n\n=== Install system packages ===\n\n'
 
-# install nvim
-printf "\n\n install nvim \n\n"
+./packages_install.sh
+
+# ------------------------------------------------------------
+# Additional packages
+# ------------------------------------------------------------
+
+printf '\n\n=== Install additional packages ===\n\n'
+
+./sub_packages_install.sh
+
+# ------------------------------------------------------------
+# External applications
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Brave Browser ===\n\n'
+
+./brave.sh
+
+printf '\n\n=== Install pgAdmin ===\n\n'
+
+./pg_admin.sh
+
+# ------------------------------------------------------------
+# Wireshark permissions
+# ------------------------------------------------------------
+
+printf '\n\n=== Add user to wireshark group ===\n\n'
+
+sudo usermod -aG wireshark "$USER"
+
+# ------------------------------------------------------------
+# tmux TPM
+# ------------------------------------------------------------
+
+printf '\n\n=== Install tmux TPM ===\n\n'
+
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+
+if [ ! -d "$TPM_DIR" ]; then
+    git clone \
+        https://github.com/tmux-plugins/tpm \
+        "$TPM_DIR"
+else
+    printf 'TPM already installed.\n'
+fi
+
+# ------------------------------------------------------------
+# Dotfiles - zsh first
+#
+# .zshrc is managed by Stow.
+# Do not remove or overwrite it later in this script.
+# ------------------------------------------------------------
+
+printf '\n\n=== Stow zsh configuration ===\n\n'
+
+if [ -d "$HOME/.dotfiles" ]; then
+    cd "$HOME/.dotfiles"
+
+    stow --restow zsh
+else
+    printf '\nWARNING: $HOME/.dotfiles does not exist\n'
+    printf 'Skipping zsh stow.\n'
+fi
+
+cd "$SCRIPT_DIR"
+
+# ------------------------------------------------------------
+# Neovim
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Neovim ===\n\n'
+
 ./nvim_install.sh
 
-# install tailscale
-printf "\n\n install tailscale \n\n"
+# ------------------------------------------------------------
+# Tailscale
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Tailscale ===\n\n'
+
 curl -fsSL https://tailscale.com/install.sh | sh
 
-# install dev tool managers
-printf "\n\n install nvm \n\n"
+# ------------------------------------------------------------
+# NVM
+# ------------------------------------------------------------
+
+printf '\n\n=== Install NVM ===\n\n'
+
 ./nvm_install.sh
 
-#source nvm
-printf "\n\n get nvm source \n\n"
-source $HOME/.nvm/nvm.sh
+export NVM_DIR="$HOME/.nvm"
 
-# install latest lts node version
-printf "\n\n install node lts \n\n"
-nvm install --lts node
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+    source "$NVM_DIR/nvm.sh"
+else
+    printf '\nERROR: NVM was not installed correctly.\n'
+    exit 1
+fi
+
+printf '\n\n=== Install Node.js LTS ===\n\n'
+
+nvm install --lts
 nvm use --lts
+nvm alias default 'lts/*'
 
-# install sdkman
-printf "\n\n install sdkman \n\n"
-curl -s "https://get.sdkman.io" | bash
-source $HOME/.sdkman/bin/sdkman-init.sh
+# ------------------------------------------------------------
+# SDKMAN
+# ------------------------------------------------------------
+
+printf '\n\n=== Install SDKMAN ===\n\n'
+
+if [ ! -d "$HOME/.sdkman" ]; then
+    curl -s "https://get.sdkman.io" | bash
+else
+    printf 'SDKMAN already installed.\n'
+fi
+
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+
 sdk version
 
-# install go
-printf "\n\n install go \n\n"
+# ------------------------------------------------------------
+# Go
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Go ===\n\n'
+
 ./go_install.sh
 
-# install rust
-printf "\n\n install rust \n\n"
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-. "$HOME/.cargo/env"
+export PATH="/usr/local/go/bin:$PATH"
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
 
-# create a directory for projects
-printf "\n\n make $HOME/projects directory \n\n"
-rm -rf $HOME/projects || true
-mkdir $HOME/projects
+printf '\n\n=== Verify Go ===\n\n'
 
-# install docker
-printf "\n\n install docker \n\n"
-sh ./docker_install.sh
+go version
 
-# install starship (prompt)
-# this may fail on next fresh install
-printf "\n\n install starship \n\n"
-curl -sS https://starship.rs/install.sh | sh
+# ------------------------------------------------------------
+# Rust
+# ------------------------------------------------------------
 
-# install ohmyzsh
-printf "\n\n install oh-my-zsh \n\n"
-rm -rf $HOME/.oh-my-zsh || true
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+printf '\n\n=== Install Rust ===\n\n'
 
-# install bitwarden CLI
-printf "\n\n install bitwarden \n\n"
+if [ ! -x "$HOME/.cargo/bin/rustc" ]; then
+    curl \
+        --proto '=https' \
+        --tlsv1.2 \
+        -sSf \
+        https://sh.rustup.rs \
+        | sh -s -- -y --no-modify-path
+else
+    printf 'Rust already installed.\n'
+fi
+
+source "$HOME/.cargo/env"
+
+printf '\n\n=== Verify Rust ===\n\n'
+
+rustc --version
+cargo --version
+
+# ------------------------------------------------------------
+# Projects
+# ------------------------------------------------------------
+
+printf '\n\n=== Projects directory ===\n\n'
+
+mkdir -p "$HOME/projects"
+
+# ------------------------------------------------------------
+# Docker
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Docker ===\n\n'
+
+./docker_install.sh
+
+# ------------------------------------------------------------
+# Starship
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Starship ===\n\n'
+
+curl -sS https://starship.rs/install.sh | sh -s -- -y
+
+# ------------------------------------------------------------
+# Oh My Zsh
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Oh My Zsh ===\n\n'
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    RUNZSH=no \
+    CHSH=no \
+    sh -c "$(
+        curl -fsSL \
+        https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    )" "" --unattended
+else
+    printf 'Oh My Zsh already installed.\n'
+fi
+
+# ------------------------------------------------------------
+# Powerlevel10k
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Powerlevel10k ===\n\n'
+
+P10K_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+
+if [ ! -d "$P10K_DIR" ]; then
+    git clone \
+        --depth=1 \
+        https://github.com/romkatv/powerlevel10k.git \
+        "$P10K_DIR"
+else
+    printf 'Powerlevel10k already installed.\n'
+fi
+
+# ------------------------------------------------------------
+# Bitwarden CLI
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Bitwarden CLI ===\n\n'
+
 npm install -g @bitwarden/cli
 
-# install powerlevel10k theme
-printf "\n\n install powerlevel10k \n\n"
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+# ------------------------------------------------------------
+# TypeScript
+# ------------------------------------------------------------
 
-# stow configs
-printf "\n\n stow .dotfiles \n\n"
-rm $HOME/.zshrc || true
-cd $HOME/.dotfiles
-stow nvim tmux zsh starship solaar
+printf '\n\n=== Install TypeScript ===\n\n'
 
-# install govm
-printf "\n\n install govm \n\n"
-go install github.com/melkeydev/govm@latest
-
-# install typescript globally (needed by pop shell install)
-printf "\n\n install TS \n\n"
 npm install --global typescript
 
-# install yarn - needed for some neovim plugins
-printf "\n\n install yarn -g \n\n"
+# ------------------------------------------------------------
+# Yarn
+# ------------------------------------------------------------
+
+printf '\n\n=== Install Yarn ===\n\n'
+
 npm install --global yarn
 
-# install awesome fonts
-printf "\n\n install fonts \n\n"
-sh ./font_install.sh
+# ------------------------------------------------------------
+# Fonts
+# ------------------------------------------------------------
 
-printf "\n\n	You need to login again\n\n"
+printf '\n\n=== Install fonts ===\n\n'
+
+./font_install.sh
+
+# ------------------------------------------------------------
+# Go VM
+# ------------------------------------------------------------
+
+printf '\n\n=== Install govm ===\n\n'
+
+go install github.com/melkeydev/govm@latest
+
+# ------------------------------------------------------------
+# Dotfiles - remaining configurations
+# ------------------------------------------------------------
+
+printf '\n\n=== Stow dotfiles ===\n\n'
+
+if [ -d "$HOME/.dotfiles" ]; then
+    cd "$HOME/.dotfiles"
+
+    stow --restow \
+        nvim \
+        tmux \
+        starship \
+        solaar \
+        zsh
+else
+    printf '\nWARNING: $HOME/.dotfiles does not exist\n'
+    printf 'Skipping stow.\n'
+fi
+
+# ------------------------------------------------------------
+# Finish
+# ------------------------------------------------------------
+
+printf '\n\n========================================\n'
+printf ' Installation complete\n'
+printf '========================================\n\n'
+
+printf 'You need to log in again for group changes to take effect.\n\n'
+
+printf 'Groups requiring a new login:\n'
+printf '  - wireshark\n'
+printf '  - docker\n\n'
+
+printf 'After logging in, verify with:\n\n'
+
+printf '  docker run hello-world\n'
+printf '  go version\n'
+printf '  node --version\n'
+printf '  nvim --version\n'
+printf '  rustc --version\n'
+printf '  cargo --version\n\n'
+

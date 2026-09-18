@@ -1,0 +1,156 @@
+set which-key
+
+"disable timeout
+set notimeout
+
+let g:WhichKey_ShowVimActions = "true"
+
+" leader
+let mapleader=" "
+
+" --------------------------------
+" FIND / SEARCH (NvChad style)
+" --------------------------------
+
+" find file
+nnoremap <leader>f :action FindInPath<CR>
+vnoremap <leader>f :action FindInPath<CR>
+
+WhichKey '<leader>f' 'find all'
+
+" search selected text in current file
+vnoremap / y/<C-R>"
+
+" next/previous occurrence (centered)
+nnoremap n nzz
+nnoremap N Nzz
+
+WhichKey 'n' 'next occurrence'
+WhichKey 'N' 'previous occurrence'
+
+
+" ------------------------------------------------
+" TAB cycling (fast navigation)
+" ------------------------------------------------
+nnoremap <Tab> :action NextTab<CR>
+nnoremap <S-Tab> :action PreviousTab<CR>
+
+WhichKey '<Tab>' 'next tab'
+WhichKey '<S-Tab>' 'previous tab'
+
+
+" ------------------------------------------------
+" COPILOT
+" ------------------------------------------------
+nnoremap <leader>c :action CopilotChat<CR>
+
+WhichKey '<leader>c' 'copilot chat'
+
+
+" ------------------------------------------------
+" BUFFER GROUP (NvChad style)
+" ------------------------------------------------
+nnoremap <leader>bb :action Switcher<CR>
+nnoremap <leader>bn :action NextTab<CR>
+nnoremap <leader>bp :action PreviousTab<CR>
+nnoremap <leader>bd :action CloseActiveTab<CR>
+nnoremap <leader>bo :action CloseAllEditorsButActive<CR>
+
+WhichKey '<leader>b' 'buffers'
+WhichKey '<leader>bb' 'switch buffer'
+WhichKey '<leader>bn' 'next buffer'
+WhichKey '<leader>bp' 'previous buffer'
+WhichKey '<leader>bd' 'delete buffer'
+WhichKey '<leader>bo' 'close others'
+
+
+" ------------------------------------------------
+" TAB REORDERING (nice QoL)
+" ------------------------------------------------
+nnoremap <A-l> :action MoveTabRight<CR>
+nnoremap <A-h> :action MoveTabLeft<CR>
+
+WhichKey '<A-l>' 'move tab right'
+WhichKey '<A-h>' 'move tab left'
+
+
+
+" -----------------------------
+" UI
+" -----------------------------
+nnoremap <leader>ee :action ActivateProjectToolWindow<CR>
+
+WhichKey '<leader>e' 'file explorer'
+WhichKey '<leader>ee' 'open file explorer'
+WhichKey '<leader>eh' 'hide all side tool windows'
+
+" -----------------------------
+" TERMINAL
+" -----------------------------
+nnoremap <leader>tt :action ActivateTerminalToolWindow<CR>
+
+WhichKey '<leader>t' 'terminal'
+WhichKey '<leader>tt' 'open terminal'
+WhichKey '<leader>th' 'hide terminal'
+
+" hide all sidebars / tool windows
+nnoremap <leader>th :action HideSideWindows<CR>
+nnoremap <leader>eh :action HideAllWindows<CR>
+
+
+" -----------------------------
+" SAVE / QUIT
+" -----------------------------
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+
+WhichKey '<leader>w' 'save'
+WhichKey '<leader>q' 'quit'
+
+
+" -----------------------------
+" WINDOW SPLIT
+" -----------------------------
+nnoremap <leader>v <C-w>v
+nnoremap <leader>h <C-w>s
+
+WhichKey '<leader>v' 'split verticaly'
+WhichKey '<leader>h' 'split horizontaly'
+
+
+" -----------------------------
+" WINDOW NAVIGATION
+" -----------------------------
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+
+" -----------------------------
+" YANK TO CLIPBOARD
+" -----------------------------
+set clipboard=unnamedplus
+
+" -----------------------------
+" STAY ON SELECTION AFTER INDENT
+" -----------------------------
+vnoremap < <gv
+vnoremap > >gv
+
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+
+" -----------------------------
+" COMMENT
+" -----------------------------
+nnoremap gc :action CommentByLineComment<CR>
+vnoremap gc :action CommentByLineComment<CR>
+
+WhichKey 'gc' 'toggle comment'
+
+map <leader>e <Action>(RecentFiles)

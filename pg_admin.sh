@@ -2,11 +2,68 @@
 
 set -e
 
-# Install the public key for the repository (if not done previously):
-curl -fsS https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo gpg --dearmor -o /usr/share/keyrings/packages-pgadmin-org.gpg
+PGADMIN_KEYRING="/usr/share/keyrings/packages-pgadmin-org.gpg"
+PGADMIN_SOURCE="/etc/apt/sources.list.d/pgadmin4.list"
 
-# Create the repository configuration file:
-sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/packages-pgadmin-org.gpg] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+printf "\n\n=== Install pgAdmin 4 ===\n\n"
 
-# Install for both desktop and web modes:
-sudo apt install pgadmin4
+# ------------------------------------------------------------
+# Prerequisites
+# ------------------------------------------------------------
+
+printf "\n=== Install prerequisites ===\n\n"
+
+sudo apt-get update
+
+sudo apt-get install -y \
+    curl \
+    gnupg \
+    lsb-release
+
+# ------------------------------------------------------------
+# Repository signing key
+# ------------------------------------------------------------
+
+printf "\n=== Add pgAdmin repository key ===\n\n"
+
+curl -fsS \
+    https://www.pgadmin.org/static/packages_pgadmin_org.pub \
+    | sudo gpg \
+        --dearmor \
+        --yes \
+        -o "$PGADMIN_KEYRING"
+
+# ------------------------------------------------------------
+# Repository
+# ------------------------------------------------------------
+
+printf "\n=== Add pgAdmin repository ===\n\n"
+
+CODENAME="$(lsb_release -cs)"
+
+sudo tee "$PGADMIN_SOURCE" > /dev/null <<EOF
+deb [signed-by=$PGADMIN_KEYRING] https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$CODENAME pgadmin4 main
+EOF
+
+# ------------------------------------------------------------
+# Install
+# ------------------------------------------------------------
+
+printf "\n=== Install pgAdmin 4 desktop ===\n\n"
+
+sudo apt-get update
+
+sudo apt-get install -y pgadmin4-desktop
+
+# ------------------------------------------------------------
+# Verify
+# ------------------------------------------------------------
+
+printf "\n\n=== Verify pgAdmin installation ===\n\n"
+
+dpkg -l pgadmin4-desktop | grep '^ii'
+
+printf "\n\n========================================\n"
+printf " pgAdmin 4 installed\n"
+printf "========================================\n\n"
+
