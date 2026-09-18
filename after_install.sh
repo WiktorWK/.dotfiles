@@ -24,7 +24,7 @@ mkdir -p "$HOME/Applications"
 
 printf '\n\n=== Install system packages ===\n\n'
 
-./packages_install.sh
+./main_packages_install.sh
 
 # ------------------------------------------------------------
 # Additional packages
