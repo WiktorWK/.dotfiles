@@ -19,7 +19,7 @@ printf "\n\n install pg admin \n\n"
 sudo ./pg_admin.sh
 
 # update and install necessary packages
-printf "\n\n instal necessary packages \n\n"
+printf "\n\n install necessary packages \n\n"
 sudo apt-get update
 sudo apt-get -y install git build-essential libssl-dev curl wget rofi zsh build-essential \
     stow fzf pip tmux lm-sensors brave-browser liferea pgadmin4 ripgrep \
@@ -104,7 +104,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 printf "\n\n stow .dotfiles \n\n"
 rm $HOME/.zshrc || true
 cd $HOME/.dotfiles
-stow nvim tmux zsh starship
+stow nvim tmux zsh starship solaar
 
 # init zsh
 printf "\n\n init ZSH \n\n"
@@ -123,7 +123,7 @@ npm install --global typescript
 printf "\n\n install yarn -g \n\n"
 npm install --global yarn
 
-# install awsome fonts
+# install awesome fonts
 printf "\n\n install fonts \n\n"
 sh ./font_install.sh
 
