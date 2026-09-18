@@ -106,11 +106,6 @@ rm $HOME/.zshrc || true
 cd $HOME/.dotfiles
 stow nvim tmux zsh starship solaar
 
-# init zsh
-printf "\n\n init ZSH \n\n"
-source $HOME/.zshrc
-zsh
-
 # install govm
 printf "\n\n install govm \n\n"
 go install github.com/melkeydev/govm@latest
