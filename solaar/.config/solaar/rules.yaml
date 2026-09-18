@@ -1,21 +1,23 @@
 %YAML 1.3
 ---
-
 - Rule:
   - Key: [Host Switch Channel 1, pressed]
-  - Set: [D0DFD932, change-host, 0]
-  - Set: [4AEFED4F, change-host, 0]
-
+  - Set: [D0DFD932, change-host, 0x0]
+  - Set: [4AEFED4F, change-host, 0x0]
+...
 ---
-
 - Rule:
   - Key: [Host Switch Channel 2, pressed]
-  - Set: [D0DFD932, change-host, 1]
-  - Set: [4AEFED4F, change-host, 1]
-
+  - Set: [D0DFD932, change-host, 0x1]
+  - Set: [4AEFED4F, change-host, 0x1]
+...
 ---
-
 - Rule:
   - Key: [Host Switch Channel 3, pressed]
-  - Set: [D0DFD932, change-host, 2]
-  - Set: [4AEFED4F, change-host, 2]
+  - Set: [D0DFD932, change-host, 0x2]
+  - Set: [4AEFED4F, change-host, 0x2]
+...
+---
+- Rule:
+  - Key: [Mouse Gesture Button, pressed]
+  - KeyPress: [Super_L]
