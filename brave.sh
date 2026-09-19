@@ -1,30 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-printf "\n\n=== Install Brave Browser repository ===\n\n"
+sudo install -d -m 0755 /etc/apt/keyrings
 
-# Install prerequisites
-sudo apt-get update
-sudo apt-get install -y curl
+curl -fsS https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg \
+    | sudo tee /etc/apt/keyrings/brave-browser-archive-keyring.gpg >/dev/null
 
-# Install Brave signing key
-sudo curl \
-    -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg \
-    https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+sudo chmod 0644 /etc/apt/keyrings/brave-browser-archive-keyring.gpg
 
-# Add Brave repository
-sudo curl \
-    -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources \
-    https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
+echo \
+    "deb [signed-by=/etc/apt/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" \
+    | sudo tee /etc/apt/sources.list.d/brave-browser-release.list >/dev/null
 
-# Update package lists
 sudo apt-get update
 
-# Install Brave
-sudo apt-get install -y brave-browser
-
-printf "\n\n=== Brave Browser installed ===\n\n"
-
-brave-browser --version
-
+sudo apt-get install -y --no-remove brave-browser

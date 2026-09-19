@@ -1,112 +1,150 @@
 #!/usr/bin/env bash
 
-set -e
-
-printf '\n\n=== Ubuntu package setup ===\n\n'
+set -euo pipefail
 
 install_group() {
     local name="$1"
     shift
 
-    printf '\n\n========================================\n'
-    printf ' Installing: %s\n' "$name"
-    printf '========================================\n\n'
+    echo
+    echo "========================================"
+    echo " Installing: $name"
+    echo "========================================"
 
-    sudo apt install -y "$@"
+    sudo apt-get install -y --no-remove "$@"
 
-    printf '\n--- GDM status after %s ---\n' "$name"
-    systemctl is-active gdm3 || true
-    systemctl --no-pager --lines=10 status gdm3 || true
-
-    printf '\n'
+    echo
+    echo "Checking GDM..."
+    systemctl is-active gdm.service || true
+    systemctl --no-pager --lines=10 status gdm.service || true
 }
 
-printf '=== Updating APT ===\n\n'
-sudo apt update
+check_desktop_packages() {
+    local packages=(
+        ubuntu-session
+        ubuntu-desktop
+        ubuntu-desktop-minimal
+        fuse3
+    )
+
+    echo
+    echo "Checking critical desktop packages..."
+
+    for package in "${packages[@]}"; do
+        if dpkg-query -W -f='${Status}' "$package" 2>/dev/null \
+            | grep -q 'install ok installed'; then
+            echo "  OK: $package"
+        else
+            echo "  ERROR: $package is not installed!"
+            exit 1
+        fi
+    done
+}
+
+echo "Updating APT..."
+sudo apt-get update
 
 # ------------------------------------------------------------
-# 1. Base / shell / CLI
+# Base / CLI
 # ------------------------------------------------------------
 
-install_group "base and CLI tools" \
-    git \
+install_group "Base / CLI" \
     curl \
     wget \
-    build-essential \
+    git \
+    unzip \
+    zip \
+    tar \
+    gzip \
+    bzip2 \
+    xz-utils \
+    ca-certificates \
+    gnupg \
+    lsb-release \
+    software-properties-common \
+    apt-transport-https \
+    build-essential
+
+check_desktop_packages
+
+# ------------------------------------------------------------
+# Development
+# ------------------------------------------------------------
+
+install_group "Development" \
+    gcc \
+    g++ \
+    make \
+    pkg-config \
     libssl-dev \
-    stow \
-    zsh \
-    fzf \
-    ripgrep \
-    jq \
-    moreutils
+    libffi-dev
+
+check_desktop_packages
 
 # ------------------------------------------------------------
-# 2. Development
+# Desktop utilities
 # ------------------------------------------------------------
 
-install_group "development tools" \
-    tmux \
-    tmuxp \
-    python3-pip \
-    python3-venv \
-    maven \
-    libpq-dev \
-    valgrind \
-    gdbserver \
-    btop
+install_group "Desktop utilities" \
+    gnome-tweaks \
+    gnome-shell-extension-manager \
+    p7zip-full \
+    file \
+    htop \
+    btop \
+    tree \
+    ncdu
+
+check_desktop_packages
 
 # ------------------------------------------------------------
-# 3. X11 / desktop utilities
+# Network
 # ------------------------------------------------------------
 
-install_group "desktop utilities" \
-    rofi \
-    maim \
-    xclip \
-    xsel \
-    feh \
-    lm-sensors \
-    solaar
-
-# ------------------------------------------------------------
-# 4. Network / diagnostics
-# ------------------------------------------------------------
-
-install_group "network tools" \
-    wireshark \
+install_group "Network" \
+    openssh-client \
+    openssh-server \
+    net-tools \
+    dnsutils \
+    traceroute \
     nmap
 
-# ------------------------------------------------------------
-# 5. Graphics / desktop applications
-# ------------------------------------------------------------
-
-install_group "desktop applications" \
-    gimp \
-    liferea \
-    clamav
+check_desktop_packages
 
 # ------------------------------------------------------------
-# 6. FUSE
+# Graphics / applications
 # ------------------------------------------------------------
 
-install_group "FUSE" \
-    fuse \
+install_group "Graphics / applications" \
+    ffmpeg \
+    imagemagick
+
+check_desktop_packages
+
+# ------------------------------------------------------------
+# FUSE
+# ------------------------------------------------------------
+#
+# IMPORTANT:
+# Do NOT install the "fuse" package on Ubuntu 24.04.
+#
+# "fuse" conflicts with fuse3 and can cause APT to remove:
+#   ubuntu-session
+#   ubuntu-desktop
+#   ubuntu-desktop-minimal
+#
+# libfuse2 is the compatibility library needed by applications
+# such as older AppImages.
+# ------------------------------------------------------------
+
+install_group "FUSE compatibility" \
     libfuse2
 
-# ------------------------------------------------------------
-# Finish
-# ------------------------------------------------------------
+check_desktop_packages
 
-printf '\n\n========================================\n'
-printf ' Installation complete\n'
-printf '========================================\n\n'
+echo
+echo "========================================"
+echo " Package installation completed"
+echo "========================================"
 
-printf 'GDM:\n'
-systemctl --no-pager --lines=20 status gdm3 || true
-
-printf '\nInstalled NVIDIA packages:\n'
-dpkg -l | grep -E '^ii\s+nvidia' || true
-
-printf '\nDone.\n'
-
+check_desktop_packages
