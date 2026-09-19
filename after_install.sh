@@ -22,7 +22,7 @@ echo "Script directory: $SCRIPT_DIR"
 # Base packages
 # ------------------------------------------------------------
 
-run_script "packages_install.sh"
+run_script "main_packages_install.sh"
 
 # ------------------------------------------------------------
 # Additional packages / repositories
