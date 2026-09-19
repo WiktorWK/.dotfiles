@@ -1,4 +1,3 @@
-```bash
 #!/usr/bin/env bash
 
 set -euo pipefail
@@ -70,4 +69,3 @@ echo
 echo "========================================"
 echo " Installation completed successfully"
 echo "========================================"
-```
