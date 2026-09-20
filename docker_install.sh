@@ -1,80 +1,101 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-printf "\n\n=== Remove old Docker installations ===\n\n"
+DOCKER_KEYRING="/etc/apt/keyrings/docker.asc"
+DOCKER_SOURCE="/etc/apt/sources.list.d/docker.sources"
+
+echo
+echo "=== Cleaning previous Docker installation ==="
+echo
+
+sudo systemctl disable --now docker.service 2>/dev/null || true
+sudo systemctl disable --now containerd.service 2>/dev/null || true
 
 sudo apt-get remove -y \
     docker \
+    docker-engine \
     docker.io \
     docker-doc \
     docker-compose \
+    docker-compose-v2 \
     podman-docker \
     containerd \
     runc || true
 
-printf "\n\n=== Install Docker prerequisites ===\n\n"
+sudo rm -f \
+    "$DOCKER_SOURCE" \
+    "$DOCKER_KEYRING"
+
+echo
+echo "=== Installing Docker prerequisites ==="
+echo
 
 sudo apt-get update
 
-sudo apt-get install -y \
+sudo apt-get install -y --no-remove \
     ca-certificates \
     curl
 
-printf "\n\n=== Add Docker's official GPG key ===\n\n"
+echo
+echo "=== Adding Docker GPG key ==="
+echo
 
 sudo install -m 0755 -d /etc/apt/keyrings
 
 sudo curl \
     -fsSL \
     https://download.docker.com/linux/ubuntu/gpg \
-    -o /etc/apt/keyrings/docker.asc
+    -o "$DOCKER_KEYRING"
 
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo chmod a+r "$DOCKER_KEYRING"
 
-printf "\n\n=== Add Docker's official repository ===\n\n"
+echo
+echo "=== Adding Docker repository ==="
+echo
 
-sudo tee /etc/apt/sources.list.d/docker.sources > /dev/null <<EOF
+sudo tee "$DOCKER_SOURCE" >/dev/null <<EOF
 Types: deb
 URIs: https://download.docker.com/linux/ubuntu
 Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
 Components: stable
 Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
+Signed-By: $DOCKER_KEYRING
 EOF
-
-printf "\n\n=== Update APT ===\n\n"
 
 sudo apt-get update
 
-printf "\n\n=== Install Docker Engine ===\n\n"
+echo
+echo "=== Installing Docker Engine ==="
+echo
 
-sudo apt-get install -y \
+sudo apt-get install -y --no-remove \
     docker-ce \
     docker-ce-cli \
     containerd.io \
     docker-buildx-plugin \
     docker-compose-plugin
 
-printf "\n\n=== Add current user to docker group ===\n\n"
+echo
+echo "=== Configure Docker ==="
+echo
 
 sudo usermod -aG docker "$USER"
-
-printf "\n\n=== Enable and start Docker ===\n\n"
 
 sudo systemctl enable --now docker.service
 sudo systemctl enable --now containerd.service
 
-printf "\n\n=== Verify Docker installation ===\n\n"
+echo
+echo "=== Verify Docker ==="
+echo
 
 sudo docker version
 sudo docker compose version
 
-printf "\n\n========================================\n"
-printf " Docker installation complete\n"
-printf "========================================\n\n"
+echo
+echo "========================================"
+echo " Docker installation complete"
+echo "========================================"
+echo
 
-printf "Log out and log in again so the docker group takes effect.\n"
-printf "Then test with:\n\n"
-printf "    docker run hello-world\n\n"
-
+echo "Log out and log in again so the docker group takes effect."

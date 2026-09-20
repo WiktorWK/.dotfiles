@@ -12,11 +12,6 @@ install_group() {
     echo "========================================"
 
     sudo apt-get install -y --no-remove "$@"
-
-    echo
-    echo "Checking GDM..."
-    systemctl is-active gdm.service || true
-    systemctl --no-pager --lines=10 status gdm.service || true
 }
 
 check_desktop_packages() {
@@ -65,8 +60,6 @@ install_group "Base / CLI" \
     apt-transport-https \
     build-essential
 
-check_desktop_packages
-
 # ------------------------------------------------------------
 # Development
 # ------------------------------------------------------------
@@ -79,7 +72,12 @@ install_group "Development" \
     libssl-dev \
     libffi-dev
 
-check_desktop_packages
+# ------------------------------------------------------------
+# Fonts
+# ------------------------------------------------------------
+
+install_group "Font tools" \
+    fontforge
 
 # ------------------------------------------------------------
 # Desktop utilities
@@ -95,8 +93,6 @@ install_group "Desktop utilities" \
     tree \
     ncdu
 
-check_desktop_packages
-
 # ------------------------------------------------------------
 # Network
 # ------------------------------------------------------------
@@ -109,8 +105,6 @@ install_group "Network" \
     traceroute \
     nmap
 
-check_desktop_packages
-
 # ------------------------------------------------------------
 # Graphics / applications
 # ------------------------------------------------------------
@@ -119,8 +113,6 @@ install_group "Graphics / applications" \
     ffmpeg \
     imagemagick
 
-check_desktop_packages
-
 # ------------------------------------------------------------
 # FUSE
 # ------------------------------------------------------------
@@ -128,17 +120,21 @@ check_desktop_packages
 # IMPORTANT:
 # Do NOT install the "fuse" package on Ubuntu 24.04.
 #
-# "fuse" conflicts with fuse3 and can cause APT to remove:
+# "fuse" can conflict with fuse3 and cause APT to remove:
 #   ubuntu-session
 #   ubuntu-desktop
 #   ubuntu-desktop-minimal
 #
-# libfuse2 is the compatibility library needed by applications
-# such as older AppImages.
+# libfuse2 is the compatibility library required by some
+# older AppImages.
 # ------------------------------------------------------------
 
 install_group "FUSE compatibility" \
     libfuse2
+
+# ------------------------------------------------------------
+# Final verification
+# ------------------------------------------------------------
 
 check_desktop_packages
 
@@ -146,5 +142,3 @@ echo
 echo "========================================"
 echo " Package installation completed"
 echo "========================================"
-
-check_desktop_packages

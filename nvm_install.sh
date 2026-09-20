@@ -1,36 +1,64 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 NVM_VERSION="v0.40.2"
 NVM_DIR="$HOME/.nvm"
 
-printf '\n\n=== Install NVM %s ===\n\n' "$NVM_VERSION"
+echo
+echo "=== Install / update NVM ${NVM_VERSION} ==="
+echo
 
-if [ ! -d "$NVM_DIR" ]; then
+if [[ ! -d "$NVM_DIR" ]]; then
     PROFILE=/dev/null \
         curl -o- \
         "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" \
         | bash
 else
-    printf 'NVM is already installed.\n'
+    echo "NVM directory already exists."
+    echo "Updating NVM..."
+
+    git -C "$NVM_DIR" fetch --tags origin
+
+    git -C "$NVM_DIR" checkout "$NVM_VERSION"
 fi
 
 export NVM_DIR="$HOME/.nvm"
 
-if [ -s "$NVM_DIR/nvm.sh" ]; then
-    source "$NVM_DIR/nvm.sh"
-else
-    printf '\nERROR: nvm.sh was not found.\n'
+if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
+    echo "ERROR: nvm.sh was not found."
     exit 1
 fi
 
-printf '\nNVM version:\n'
+source "$NVM_DIR/nvm.sh"
+
+echo
+echo "NVM:"
 nvm --version
 
-printf '\n\n========================================\n'
-printf ' NVM installed\n'
-printf '========================================\n\n'
+echo
+echo "=== Install Node.js LTS ==="
+echo
 
-printf 'NVM directory: %s\n' "$NVM_DIR"
+nvm install --lts
+nvm alias default 'lts/*'
+nvm use default
 
+echo
+echo "Node.js:"
+node --version
+
+echo
+echo "npm:"
+npm --version
+
+echo
+echo "=== Install global npm packages ==="
+echo
+
+npm install -g \
+    prettier \
+    typescript
+
+echo
+echo "NVM installation completed."
