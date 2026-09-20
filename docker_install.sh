@@ -4,6 +4,7 @@ set -euo pipefail
 
 DOCKER_KEYRING="/etc/apt/keyrings/docker.asc"
 DOCKER_SOURCE="/etc/apt/sources.list.d/docker.sources"
+DOCKER_USER="${SUDO_USER:-$USER}"
 
 echo
 echo "=== Cleaning previous Docker installation ==="
@@ -24,8 +25,11 @@ sudo apt-get remove -y \
     runc || true
 
 sudo rm -f \
-    "$DOCKER_SOURCE" \
-    "$DOCKER_KEYRING"
+    /etc/apt/sources.list.d/docker.list \
+    /etc/apt/sources.list.d/docker.sources \
+    /etc/apt/keyrings/docker.asc \
+    /etc/apt/keyrings/docker.gpg \
+    /usr/share/keyrings/docker-archive-keyring.gpg
 
 echo
 echo "=== Installing Docker prerequisites ==="
@@ -33,7 +37,7 @@ echo
 
 sudo apt-get update
 
-sudo apt-get install -y --no-remove \
+sudo apt-get install -y \
     ca-certificates \
     curl
 
@@ -48,7 +52,7 @@ sudo curl \
     https://download.docker.com/linux/ubuntu/gpg \
     -o "$DOCKER_KEYRING"
 
-sudo chmod a+r "$DOCKER_KEYRING"
+sudo chmod 0644 "$DOCKER_KEYRING"
 
 echo
 echo "=== Adding Docker repository ==="
@@ -69,7 +73,7 @@ echo
 echo "=== Installing Docker Engine ==="
 echo
 
-sudo apt-get install -y --no-remove \
+sudo apt-get install -y \
     docker-ce \
     docker-ce-cli \
     containerd.io \
@@ -80,10 +84,9 @@ echo
 echo "=== Configure Docker ==="
 echo
 
-sudo usermod -aG docker "$USER"
+sudo usermod -aG docker "$DOCKER_USER"
 
 sudo systemctl enable --now docker.service
-sudo systemctl enable --now containerd.service
 
 echo
 echo "=== Verify Docker ==="
@@ -98,4 +101,5 @@ echo " Docker installation complete"
 echo "========================================"
 echo
 
+echo "Docker user: $DOCKER_USER"
 echo "Log out and log in again so the docker group takes effect."
