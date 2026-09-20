@@ -67,14 +67,14 @@ install_group "Base / CLI" \
 # ------------------------------------------------------------
 
 install_group "Development" \
-    gcc \
-    g++ \
-    make \
     pkg-config \
     libssl-dev \
     libffi-dev \
+    libpq-dev \
     shellcheck \
-    shfmt
+    shfmt \
+    gdbserver \
+    valgrind
 
 # ------------------------------------------------------------
 # Python
@@ -102,11 +102,14 @@ install_group "Terminal" \
     tmuxp \
     ripgrep \
     fd-find \
+    fzf \
     tree \
     htop \
     btop \
     ncdu \
-    file
+    file \
+    moreutils \
+    stow
 
 # ------------------------------------------------------------
 # Fonts
@@ -122,7 +125,8 @@ install_group "Font tools" \
 install_group "Desktop utilities" \
     gnome-tweaks \
     gnome-shell-extension-manager \
-    p7zip-full
+    p7zip-full \
+    solaar
 
 # ------------------------------------------------------------
 # Network
