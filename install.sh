@@ -22,11 +22,14 @@ run_script "apt_get_install.sh"
 
 run_script "docker_install.sh"
 run_script "brave_install.sh"
+run_script "google_chrome_install.sh"
 run_script "pg_admin_install.sh"
 
 run_script "go_install.sh"
 run_script "nvm_install.sh"
 run_script "nvim_install.sh"
+run_script "jetbrains_toolbox_install.sh"
+run_script "mongodb_compas_install.sh"
 
 run_script "font_install.sh"
 run_script "starship_install.sh"
