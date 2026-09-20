@@ -58,7 +58,10 @@ install_group "Base / CLI" \
     lsb-release \
     software-properties-common \
     apt-transport-https \
-    build-essential
+    build-essential \
+    rsync \
+    jq \
+    bc
 
 # ------------------------------------------------------------
 # Development
@@ -70,7 +73,41 @@ install_group "Development" \
     make \
     pkg-config \
     libssl-dev \
-    libffi-dev
+    libffi-dev \
+    shellcheck \
+    shfmt
+
+# ------------------------------------------------------------
+# Python
+# ------------------------------------------------------------
+
+install_group "Python" \
+    python3 \
+    python3-pip \
+    python3-venv
+
+# ------------------------------------------------------------
+# Java
+# ------------------------------------------------------------
+
+install_group "Java" \
+    default-jdk \
+    maven
+
+# ------------------------------------------------------------
+# Terminal / shell
+# ------------------------------------------------------------
+
+install_group "Terminal" \
+    tmux \
+    tmuxp \
+    ripgrep \
+    fd-find \
+    tree \
+    htop \
+    btop \
+    ncdu \
+    file
 
 # ------------------------------------------------------------
 # Fonts
@@ -86,12 +123,7 @@ install_group "Font tools" \
 install_group "Desktop utilities" \
     gnome-tweaks \
     gnome-shell-extension-manager \
-    p7zip-full \
-    file \
-    htop \
-    btop \
-    tree \
-    ncdu
+    p7zip-full
 
 # ------------------------------------------------------------
 # Network
@@ -114,19 +146,15 @@ install_group "Graphics / applications" \
     imagemagick
 
 # ------------------------------------------------------------
-# FUSE
+# Security
 # ------------------------------------------------------------
-#
-# IMPORTANT:
-# Do NOT install the "fuse" package on Ubuntu 24.04.
-#
-# "fuse" can conflict with fuse3 and cause APT to remove:
-#   ubuntu-session
-#   ubuntu-desktop
-#   ubuntu-desktop-minimal
-#
-# libfuse2 is the compatibility library required by some
-# older AppImages.
+
+install_group "Security" \
+    clamav \
+    clamav-daemon
+
+# ------------------------------------------------------------
+# FUSE compatibility
 # ------------------------------------------------------------
 
 install_group "FUSE compatibility" \
