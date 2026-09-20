@@ -27,6 +27,7 @@ run_script "pg_admin_install.sh"
 
 run_script "go_install.sh"
 run_script "nvm_install.sh"
+run_script "sdkman_install.sh"
 run_script "nvim_install.sh"
 run_script "mongodb_compas_install.sh"
 
