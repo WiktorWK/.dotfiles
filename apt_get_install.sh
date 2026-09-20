@@ -134,7 +134,8 @@ install_group "Network" \
     net-tools \
     dnsutils \
     traceroute \
-    nmap
+    nmap \
+    wireshark
 
 # ------------------------------------------------------------
 # Graphics / applications
