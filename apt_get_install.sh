@@ -57,7 +57,6 @@ install_group "Base / CLI" \
     gnupg \
     lsb-release \
     software-properties-common \
-    apt-transport-https \
     build-essential \
     rsync \
     jq \
@@ -158,7 +157,7 @@ install_group "Security" \
 # ------------------------------------------------------------
 
 install_group "FUSE compatibility" \
-    libfuse2
+    libfuse2t64
 
 # ------------------------------------------------------------
 # Final verification
