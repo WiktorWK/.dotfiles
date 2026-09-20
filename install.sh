@@ -18,7 +18,7 @@ run_script() {
 echo "Starting system setup..."
 echo "Script directory: $SCRIPT_DIR"
 
-run_script "main_packages_install.sh"
+run_script "apt_get_install.sh"
 
 run_script "docker_install.sh"
 run_script "brave.sh"
