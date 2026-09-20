@@ -9,8 +9,11 @@ echo
 echo "=== Cleaning previous Brave installation ==="
 echo
 
+sudo apt-get remove -y brave-browser 2>/dev/null || true
+
 sudo rm -f \
     /etc/apt/sources.list.d/brave-browser-release.list \
+    /etc/apt/sources.list.d/brave-browser-release.sources \
     /etc/apt/sources.list.d/brave-browser.sources \
     /etc/apt/keyrings/brave-browser-archive-keyring.gpg \
     /usr/share/keyrings/brave-browser-archive-keyring.gpg
@@ -39,7 +42,7 @@ echo
 echo "=== Installing Brave ==="
 echo
 
-sudo apt-get install -y --no-remove brave-browser
+sudo apt-get install -y brave-browser
 
 echo
 echo "Brave installed successfully."
