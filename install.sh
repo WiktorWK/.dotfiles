@@ -21,8 +21,8 @@ echo "Script directory: $SCRIPT_DIR"
 run_script "apt_get_install.sh"
 
 run_script "docker_install.sh"
-run_script "brave.sh"
-run_script "pg_admin.sh"
+run_script "brave_install.sh"
+run_script "pg_admin_install.sh"
 
 run_script "go_install.sh"
 run_script "nvm_install.sh"
